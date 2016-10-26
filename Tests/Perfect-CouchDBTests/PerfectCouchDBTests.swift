@@ -80,7 +80,6 @@ class PerfectCouchDBTests: XCTestCase {
 	func testSessionJSON() {
 		let auth = CouchDBAuthentication("perfect","perfect")
 		XCTAssertEqual(auth.sessionJSON(), "{\"name\": \"perfect\",\"password\": \"perfect\"}")
-
 	}
 
 

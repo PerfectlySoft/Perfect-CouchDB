@@ -51,6 +51,7 @@ public struct CouchDBAuthentication {
 	}
 	public mutating func sessionSetToken(t: String) {
 		self.token = t
+		authType = .session
 	}
 
 
