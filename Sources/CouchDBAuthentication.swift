@@ -47,7 +47,7 @@ public struct CouchDBAuthentication {
 		return source.toBase64()
 	}
 	public func sessionJSON() -> String {
-		return "{\"name\": \(username),\"password\": \(password)}"
+		return "{\"name\": \"\(username)\",\"password\": \"\(password)\"}"
 	}
 	public mutating func sessionSetToken(t: String) {
 		self.token = t
