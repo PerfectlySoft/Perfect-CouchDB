@@ -25,6 +25,12 @@ import cURL
 public enum CouchDBError : Error {
 	/// A CouchDB error code and message.
 	case Error(code: Int, msg: String)
+
+	/*
+		401 - Session authentication failed
+	
+		1001 - Events error: Feed must be one of longpoll, continuous, or eventsource
+	*/
 }
 
 public enum HTTPMethod : String {
@@ -57,25 +63,45 @@ class CouchDB {
 
 
 	/*
+		SESSION AUTHENTICATION
+	*/
+	public func getToken() throws -> Bool {
+		guard let _ = authentication.username, let _ = authentication.password else {
+			throw CouchDBError.Error(code: 401, msg: "Please supply a username or password.")
+		}
+		let body = authentication.sessionJSON()
+		print(body)
+		let (code, response, raw, header) = makeRequest(.post, "/_session", body: body)
+		//return (code, response)
+		print(header.variables)
+		print(code)
+		print(response)
+		print(raw)
+		return true
+	}
+
+
+
+	/*
 		SERVER API FUNCTIONS
 	*/
 
 
 	/// Server Info
 	public func serverInfo() -> (CouchDBResponse, [String:Any]) {
-		let (code, response, _) = makeRequest(.get, "/")
+		let (code, response, _, _) = makeRequest(.get, "/")
 		return (code, response)
 	}
 
 	/// Server Active Tasks
 	public func serverActiveTasks() -> (CouchDBResponse, [String:Any]) {
-		let (code, response, _) = makeRequest(.get, "/_active_tasks")
+		let (code, response, _, _) = makeRequest(.get, "/_active_tasks")
 		return (code, response)
 	}
 
 	/// Server - List all databases
 	public func listDatabases() -> (CouchDBResponse, [String:Any]) {
-		let (code, response, _) = makeRequest(.get, "/_all_dbs")
+		let (code, response, _, _) = makeRequest(.get, "/_all_dbs")
 		return (code, response)
 	}
 
@@ -94,14 +120,14 @@ class CouchDB {
 			throw CouchDBError.Error(code: 1001, msg: "Feed must be one of longpoll, continuous, or eventsource.")
 		}
 		let options = "?feed=\(feed)&timeout=\(timeout)&heartbeat=\(heartbeat)"
-		let (code, response, _) = makeRequest(.get, "/_db_updates\(options)")
+		let (code, response, _, _) = makeRequest(.get, "/_db_updates\(options)")
 		return (code, response)
 	}
 
 	/// Server - List node membership
 	/// Displays the nodes that are part of the cluster as cluster_nodes. The field all_nodes displays all nodes this node knows about, including the ones that are part of the cluster. The endpoint is useful when setting up a cluster, see Node Management
 	public func listNodeMembership() -> (CouchDBResponse, [String:Any]) {
-		let (code, response, _) = makeRequest(.get, "/_membership")
+		let (code, response, _, _) = makeRequest(.get, "/_membership")
 		return (code, response)
 	}
 
@@ -109,7 +135,7 @@ class CouchDB {
 	/// Gets the CouchDB log, equivalent to accessing the local log file of the corresponding CouchDB instance.
 	public func log(bytes: Int = 1000, offset: Int = 0) throws -> (CouchDBResponse, [String:Any]) {
 		let options = "?bytes=\(bytes)&offset=\(offset)"
-		let (code, response, _) = makeRequest(.get, "/_log\(options)")
+		let (code, response, _, _) = makeRequest(.get, "/_log\(options)")
 		return (code, response)
 	}
 
@@ -153,7 +179,7 @@ class CouchDB {
 	/// Check if Database Exists
 	// Returns true / false
 	public func databaseExists(_ name: String) -> Bool {
-		let (code, _, _) = makeRequest(.head, "/\(name)")
+		let (code, _, _, _) = makeRequest(.head, "/\(name)")
 		if code == .ok { return true }
 		return false
 	}
@@ -163,8 +189,19 @@ class CouchDB {
 	public func databaseCreate(_ name: String) -> CouchDBResponse {
 		// TODO: do db name check
 
-		let (code, _, _) = makeRequest(.put, "/\(name)")
-		database = name
+		let (code, x, y, z) = makeRequest(.put, "/\(name)")
+		if debug {
+			print("code: \(code)")
+			print("data: \(x)")
+			print("raw: \(y)")
+			print("http: \(z.variables)")
+		}
+		if code == .created {
+			database = name
+		}
+		if debug {
+			print("Database is now set to: \(database)")
+		}
 		return code
 	}
 	
@@ -175,7 +212,7 @@ class CouchDB {
 		if !name.isEmpty { database = name }
 		if database.isEmpty { return (.notAcceptable) }
 
-		let (code, _, _) = makeRequest(.delete, "/\(database)")
+		let (code, _, _, _) = makeRequest(.delete, "/\(database)")
 		database = ""
 		return code
 	}
@@ -198,7 +235,7 @@ class CouchDB {
 		if !name.isEmpty { database = name }
 		if database.isEmpty { return (.notAcceptable, [String:Any]()) }
 
-		let (code, response, _) = makeRequest(.get, "/\(database)")
+		let (code, response, _, _) = makeRequest(.get, "/\(database)")
 		return (code, response)
 	}
 

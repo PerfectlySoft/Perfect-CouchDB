@@ -31,9 +31,9 @@ public enum CouchDBAuthType {
 public struct CouchDBAuthentication {
 
 	var authType:	CouchDBAuthType	= .none
-	var username:	String			= ""
-	var password:	String			= ""
-	var token:		String			= "" // used only if authType = .session
+	var username:	String?
+	var password:	String?
+	var token:		String? // used only if authType = .session
 
 	public init() {}
 	public init(_ u: String, _ p: String, auth: CouchDBAuthType = .basic) {
@@ -43,11 +43,17 @@ public struct CouchDBAuthentication {
 	}
 
 	public func basic() -> String {
-		let source = "\(username):\(password)"
-		return source.toBase64()
+		if let u = username, let p = password {
+			let source = "\(u):\(p)"
+			return source.toBase64()
+		}
+		return ""
 	}
 	public func sessionJSON() -> String {
-		return "{\"name\": \"\(username)\",\"password\": \"\(password)\"}"
+		if let u = username, let p = password {
+			return "{\"name\": \"\(u)\",\"password\": \"\(p)\"}"
+		}
+		return ""
 	}
 	public mutating func sessionSetToken(t: String) {
 		self.token = t

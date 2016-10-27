@@ -8,7 +8,7 @@ class PerfectCouchDBTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		test = CouchDB()
-
+//		test.connector.port = 8181
 		test.debug = true
 	}
 
@@ -51,6 +51,7 @@ class PerfectCouchDBTests: XCTestCase {
 //	}
 
 	func testDatabaseInfo() {
+		test.authentication = auth
 		let code = test.databaseCreate("newdb")
 		XCTAssert(.created == code, "Response incorrect, \(code)")
 		XCTAssert(test.database == "newdb", "Database property not set")
@@ -74,13 +75,25 @@ class PerfectCouchDBTests: XCTestCase {
 	func testAuthBasicToken() {
 		let auth = CouchDBAuthentication("perfect","perfect")
 		let token = auth.basic()
-		XCTAssertEqual(token.fromBase64(), "perfect:perfect")
+		print(token)
+		XCTAssertEqual(token.fromBase64()!, "perfect:perfect")
 	}
 
 	func testSessionJSON() {
 		let auth = CouchDBAuthentication("perfect","perfect")
 		XCTAssertEqual(auth.sessionJSON(), "{\"name\": \"perfect\",\"password\": \"perfect\"}")
 	}
+
+//	func testSessionAuth() {
+//		auth = CouchDBAuthentication("perfect", "perfect", auth: .session)
+//		test.authentication = auth
+//		do {
+//			try test.getToken()
+//		} catch {
+//			print(error)
+//		}
+//		//		XCTAssertEqual(auth.sessionJSON(), "{\"name\": \"perfect\",\"password\": \"perfect\"}")
+//	}
 
 
 	

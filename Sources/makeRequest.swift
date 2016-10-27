@@ -12,7 +12,7 @@ import cURL
 import SwiftString
 
 extension CouchDB {
-	public func makeRequest(_ method: HTTPMethod, _ route: String) -> (CouchDBResponse, [String:Any], [String:Any]) {
+	public func makeRequest(_ method: HTTPMethod, _ route: String, body: String = "") -> (CouchDBResponse, [String:Any], [String:Any], HTTPHeaderParser) {
 
 		var url = "http://\(connector.host):\(connector.port)\(route)"
 		if connector.ssl { url = "https://\(connector.host):\(connector.port)\(route)" }
@@ -22,6 +22,7 @@ extension CouchDB {
 
 		let curlObject = CURL(url: url)
 		curlObject.setOption(CURLOPT_HTTPHEADER, s: "Accept: application/json")
+		curlObject.setOption(CURLOPT_HTTPHEADER, s: "cache-control: no-cache")
 		curlObject.setOption(CURLOPT_USERAGENT, s: "PerfectAPI2.0")
 
 		// Set Authentication
@@ -31,7 +32,12 @@ extension CouchDB {
 
 		switch method {
 		case .post :
-			curlObject.setOption(CURLOPT_HTTPPOST, int: 1)
+			//			curlObject.setOption(CURLOPT_POST, int: 1)  // is implied by postfields
+//			let authjson = authentication.sessionJSON()
+//			print(authjson)
+//			curlObject.setOption(CURLOPT_HTTPHEADER, s: "Content-Type: application/x-www-form-urlencoded")
+			curlObject.setOption(CURLOPT_POSTFIELDS, s: authentication.sessionJSON())
+//			curlObject.setOption(CURLOPT_POSTFIELDSIZE, int: authjson.characters.count)
 		case .get :
 			curlObject.setOption(CURLOPT_HTTPGET, int: 1)
 		default:
@@ -89,10 +95,10 @@ extension CouchDB {
 					data = try content?.jsonDecode() as! [String : Any]
 				}
 			}
-			return (CouchDBResponse.statusFrom(http.code), data, raw)
+			return (CouchDBResponse.statusFrom(http.code), data, raw, http)
 		} catch {
 			print(error)
-			return (CouchDBResponse.statusFrom(http.code), [:], raw)
+			return (CouchDBResponse.statusFrom(http.code), [:], raw, http)
 		}
 	}
 }
