@@ -22,7 +22,7 @@ extension CouchDB {
 
 		let curlObject = CURL(url: url)
 		curlObject.setOption(CURLOPT_HTTPHEADER, s: "Accept: application/json")
-		curlObject.setOption(CURLOPT_HTTPHEADER, s: "cache-control: no-cache")
+		curlObject.setOption(CURLOPT_HTTPHEADER, s: "Cache-Control: no-cache")
 		curlObject.setOption(CURLOPT_USERAGENT, s: "PerfectAPI2.0")
 
 		// Set Authentication
@@ -32,12 +32,11 @@ extension CouchDB {
 
 		switch method {
 		case .post :
-			//			curlObject.setOption(CURLOPT_POST, int: 1)  // is implied by postfields
-//			let authjson = authentication.sessionJSON()
-//			print(authjson)
-//			curlObject.setOption(CURLOPT_HTTPHEADER, s: "Content-Type: application/x-www-form-urlencoded")
-			curlObject.setOption(CURLOPT_POSTFIELDS, s: authentication.sessionJSON())
-//			curlObject.setOption(CURLOPT_POSTFIELDSIZE, int: authjson.characters.count)
+			let byteArray = [UInt8](body.utf8)
+			curlObject.setOption(CURLOPT_POST, int: 1)
+			curlObject.setOption(CURLOPT_POSTFIELDSIZE, int: byteArray.count)
+			curlObject.setOption(CURLOPT_COPYPOSTFIELDS, v: UnsafeMutablePointer(mutating: byteArray))
+			curlObject.setOption(CURLOPT_HTTPHEADER, s: "Content-Type: application/json")
 		case .get :
 			curlObject.setOption(CURLOPT_HTTPGET, int: 1)
 		default:
@@ -45,7 +44,7 @@ extension CouchDB {
 		}
 
 		var header = [UInt8]()
-		var body = [UInt8]()
+		var bodyIn = [UInt8]()
 
 		var code = 0
 		var data = [String: Any]()
@@ -59,7 +58,7 @@ extension CouchDB {
 				header.append(contentsOf: h)
 			}
 			if let b = perf.3 {
-				body.append(contentsOf: b)
+				bodyIn.append(contentsOf: b)
 			}
 			perf = curlObject.perform()
 		}
@@ -67,7 +66,7 @@ extension CouchDB {
 			header.append(contentsOf: h)
 		}
 		if let b = perf.3 {
-			body.append(contentsOf: b)
+			bodyIn.append(contentsOf: b)
 		}
 		let _ = perf.1
 
@@ -80,7 +79,7 @@ extension CouchDB {
 		let http = HTTPHeaderParser(header:headerStr!)
 
 		// assamble the body from a binary byte array to a string
-		let content = String(bytes:body, encoding:String.Encoding.utf8)
+		let content = String(bytes:bodyIn, encoding:String.Encoding.utf8)
 
 		// prepare the failsafe content.
 		raw = ["status": http.status, "header": headerStr!, "body": content!]
