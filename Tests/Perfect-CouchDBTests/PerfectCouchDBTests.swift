@@ -8,7 +8,7 @@ class PerfectCouchDBTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		test = CouchDB()
-//		test.connector.port = 8181
+		test.connector.port = 5984
 		test.debug = true
 	}
 
@@ -62,6 +62,22 @@ class PerfectCouchDBTests: XCTestCase {
 		test.databaseDelete() // cleanup
 	}
 
+	func testDatabaseAddDoc() {
+		test.authentication = auth
+		let _ = test.databaseCreate("testdb")
+		let _ = test.database = "testdb"
+//		XCTAssert(.unauthorized == code, "Unauthorized \(code)")
+
+//		let dataSubmit = ["one":"ONE"]
+		let dataSubmit = ["one":"ONE","two":"donKEY!"]
+		do {
+			let (addCode, response) = try test.addDoc("testdb",doc: dataSubmit)
+			print(addCode)
+			print(response)
+		} catch {
+			print(error)
+		}
+	}
 
 	//listDatabases
 
