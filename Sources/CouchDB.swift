@@ -35,18 +35,18 @@ public enum CouchDBError : Error {
 
 public enum HTTPMethod : String {
 	case get		= "GET"
-	case post	= "POST"
-	case head	= "HEAD"
+	case post		= "POST"
+	case head		= "HEAD"
 	case put		= "PUT"
-	case delete	= "DELETE"
-	case copy	= "COPY"
+	case delete		= "DELETE"
+	case copy		= "COPY"
 }
 
 
 class CouchDB {
 
 	var debug: Bool		= false
-    var database			= ""
+    var database		= ""
 	var connector		= CouchDBConnector()			// defaults have been defined in connector
 	var authentication	= CouchDBAuthentication()		// default is for none
 
@@ -70,13 +70,10 @@ class CouchDB {
 			throw CouchDBError.Error(code: 401, msg: "Please supply a username or password.")
 		}
 		let body = authentication.sessionJSON()
-		print(body)
-		let (code, response, raw, header) = makeRequest(.post, "/_session", body: body)
-		//return (code, response)
-		print(header.variables)
+		let (code, _, _, _) = makeRequest(.post, "/_session", body: body)
+//		let (code, response, raw, header) = makeRequest(.post, "/_session", body: body)
+		// need to handle code options...
 		print(code)
-		print(response)
-		print(raw)
 		return true
 	}
 
@@ -189,19 +186,15 @@ class CouchDB {
 	public func databaseCreate(_ name: String) -> CouchDBResponse {
 		// TODO: do db name check
 
-		let (code, x, y, z) = makeRequest(.put, "/\(name)")
+		let (code, data, raw, http) = makeRequest(.put, "/\(name)")
 		if debug {
-			print("code: \(code)")
-			print("data: \(x)")
-			print("raw: \(y)")
-			print("http: \(z.variables)")
+			print("[DEBUG] Code: \(code)")
+			print("[DEBUG] Data: \(data)")
+			print("[DEBUG] Raw: \(raw)")
+			print("[DEBUG] http: \(http.variables)")
 		}
-		if code == .created {
-			database = name
-		}
-		if debug {
-			print("Database is now set to: \(database)")
-		}
+		if code == .created { database = name }
+		if debug { print("[DEBUG] Database set to: \(database)") }
 		return code
 	}
 	
@@ -239,6 +232,46 @@ class CouchDB {
 		return (code, response)
 	}
 
+	public func addDoc(_ name: String = "", doc: [String: Any], id: String = "") throws -> (CouchDBResponse, [String:Any]) {
+		// TODO: do db name check
+		if !name.isEmpty { database = name }
+		if database.isEmpty { return (.notAcceptable, [String:Any]()) }
+
+		var docStore: String?
+
+//		if let str = doc as? String {
+//			do {
+//				docStore = try str.jsonEncodedString()
+//			} catch {
+//				print(error)
+//				throw CouchDBError.Error(code: 201, msg: "Invalid String as JSON")
+//			}
+//		} else
+//			if let str = doc as? [String: Any] {
+			do {
+				docStore = try doc.jsonEncodedString()
+				print("Encoded: \(docStore!)")
+			} catch {
+				print(error)
+				throw CouchDBError.Error(code: 201, msg: "Invalid [String:Any] as JSON")
+			}
+//		}
+//			else if let str = doc as? [Any] {
+//			do {
+//				docStore = try str.jsonEncodedString()
+//			} catch {
+//				print(error)
+//				throw CouchDBError.Error(code: 201, msg: "Invalid [Any] as JSON")
+//			}
+//		}
+
+//		guard let docStoreOK = docStore else {
+//			throw CouchDBError.Error(code: 201, msg: "Invalid Input as JSON")
+//		}
+		print(docStore!)
+		let (code, response, _, _) = makeRequest(.post, "/\(database)/", body: docStore!)
+		return (code, response)
+	}
 
 }
 
