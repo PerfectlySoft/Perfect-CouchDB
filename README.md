@@ -30,7 +30,22 @@ Ensure you have installed and activated the latest Swift 3.0 tool chain.
 ## Example usage:
 
 ```swift
-...
+var test = CouchDB()
+var auth = CouchDBAuthentication("perfect", "perfect", auth: .basic)
+
+test.connector.port = 5984
+test.authentication = auth
+let code = test.databaseCreate("testdb")
+
+let dataSubmit = ["one":"ONE","two":"TWO"]
+do {
+	let (addCode, response) = try test.addDoc("testdb",doc: dataSubmit)
+	print(addCode)
+	print(response)
+} catch {
+	print(error)
+}
+
 ```
 
 
