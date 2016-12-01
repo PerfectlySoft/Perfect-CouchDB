@@ -64,3 +64,5 @@ fastlane/screenshots
 
 Packages/
 *.xcodeproj/
+buildlinux
+Package.swift.orig

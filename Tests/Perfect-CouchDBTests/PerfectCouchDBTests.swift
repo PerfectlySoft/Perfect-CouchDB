@@ -62,22 +62,75 @@ class PerfectCouchDBTests: XCTestCase {
 		test.databaseDelete() // cleanup
 	}
 
-	func testDatabaseAddDoc() {
+	func testDatabaseAddDocStringString() {
 		test.authentication = auth
 		let _ = test.databaseCreate("testdb")
 		let _ = test.database = "testdb"
 //		XCTAssert(.unauthorized == code, "Unauthorized \(code)")
 
 //		let dataSubmit = ["one":"ONE"]
-		let dataSubmit = ["one":"ONE","two":"donKEY!"]
+		let dataSubmit = ["one":"ONE","two":"donKEY!!!"]
 		do {
-			let (addCode, response) = try test.addDoc("testdb",doc: dataSubmit)
-			print(addCode)
-			print(response)
+			let (addCode, _) = try test.addDoc("testdb",doc: dataSubmit)
+//			print(addCode)
+//			print(response)
+			XCTAssert(.created == addCode, "Expected .created, got \(addCode)")
 		} catch {
 			print(error)
+			XCTFail()
 		}
 	}
+
+	func testDatabaseAddDocStringOnly() {
+		test.authentication = auth
+		let _ = test.databaseCreate("testdb")
+		let _ = test.database = "testdb"
+		do {
+			let dataSubmit = try ["one":"ONE","two":"Encoded String"].jsonEncodedString()
+			let (addCode, _) = try test.addDoc("testdb",doc: dataSubmit)
+//			print(addCode)
+//			print(response)
+			XCTAssert(.created == addCode, "Expected .created, got \(addCode)")
+		} catch {
+			print(error)
+			XCTFail()
+		}
+	}
+
+	func testDatabaseAddDocAny1() {
+		test.authentication = auth
+		let _ = test.databaseCreate("testdb")
+		let _ = test.database = "testdb"
+		do {
+			let dataSubmit = ["one":["X","Y"],"two":"One was an array of strings"] as [String : Any]
+			let (addCode, _) = try test.addDoc("testdb",doc: dataSubmit)
+//			print(addCode)
+//			print(response)
+			XCTAssert(.created == addCode, "Expected .created, got \(addCode)")
+		} catch {
+			print(error)
+			XCTFail()
+		}
+	}
+
+	func testDatabaseAddDocAny2() {
+		test.authentication = auth
+		let _ = test.databaseCreate("testdb")
+		let _ = test.database = "testdb"
+		do {
+			let dataSubmit = [1,"two"] as [Any]
+			let (addCode, _) = try test.addDoc("testdb",doc: dataSubmit)
+//			print(addCode)
+//			print(response)
+			XCTAssert(CouchDBResponse.badRequest == addCode, "Expected .badRequest, got \(addCode)")
+		} catch {
+			print(error)
+			XCTFail()
+		}
+	}
+
+
+
 
 	//listDatabases
 
@@ -91,7 +144,7 @@ class PerfectCouchDBTests: XCTestCase {
 	func testAuthBasicToken() {
 		let auth = CouchDBAuthentication("perfect","perfect")
 		let token = auth.basic()
-		print(token)
+//		print(token)
 		XCTAssertEqual(token.fromBase64()!, "perfect:perfect")
 	}
 
@@ -104,7 +157,7 @@ class PerfectCouchDBTests: XCTestCase {
 //		auth = CouchDBAuthentication("perfect", "perfect", auth: .session)
 //		test.authentication = auth
 //		do {
-//			try test.getToken()
+//			let result = try test.getToken()
 //		} catch {
 //			print(error)
 //		}
@@ -122,7 +175,11 @@ class PerfectCouchDBTests: XCTestCase {
             ("testDatabaseCreateAuth",testDatabaseCreateAuth),
 //            ("testDatabaseExists",testDatabaseExists),
 			("testDatabaseInfo",testDatabaseInfo),
-			("testAuthBasicToken",testAuthBasicToken)
+			("testAuthBasicToken",testAuthBasicToken),
+			("testDatabaseAddDocStringString",testDatabaseAddDocStringString),
+			("testDatabaseAddDocStringOnly",testDatabaseAddDocStringOnly),
+			("testDatabaseAddDocAny1",testDatabaseAddDocAny1),
+			("testDatabaseAddDocAny2",testDatabaseAddDocAny2),
         ]
     }
 }

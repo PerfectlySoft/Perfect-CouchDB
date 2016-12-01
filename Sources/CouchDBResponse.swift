@@ -65,6 +65,7 @@ enum CouchDBResponse {
 		self = .undefined
 	}
 
+	/// converts an HTTP status code to the correct enum value
 	public static func statusFrom(_ code: Int) -> CouchDBResponse {
 		switch code {
 		case 200: return .ok

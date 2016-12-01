@@ -11,8 +11,26 @@ import PerfectCURL
 import cURL
 import SwiftString
 
+
 extension CouchDB {
-	public func makeRequest(_ method: HTTPMethod, _ route: String, body: String = "") -> (CouchDBResponse, [String:Any], [String:Any], HTTPHeaderParser) {
+
+
+	/// The function that triggers the specific interaction with the CouchDB Server
+	/// Should only be used outside of the CouchDB module when custom interaction is required.
+	/// Parameters:
+	/// - method: The HTTP Method enum, i.e. .get, .post
+	/// - route: The route required
+	/// - body: The JSON formatted sring to sent to the server
+	/// - rev: An optional revision to pass as the If-Match header
+	/// Response: 
+	/// (CouchDBResponse, "data" - [String:Any], "raw response" - [String:Any], HTTPHeaderParser)
+	public func makeRequest(
+			_ method: HTTPMethod,
+			_ route: String,
+			body: String = "",
+			rev: String = "",
+			destination: String = ""
+		) -> (CouchDBResponse, [String:Any], [String:Any], HTTPHeaderParser) {
 
 		var url = "http://\(connector.host):\(connector.port)\(route)"
 		if connector.ssl { url = "https://\(connector.host):\(connector.port)\(route)" }
@@ -28,6 +46,14 @@ extension CouchDB {
 		// Set Authentication
 		if authentication.authType == .basic && authentication.username != "" {
 			curlObject.setOption(CURLOPT_HTTPHEADER, s: "Authorization: Basic \(authentication.basic())")
+		}
+
+		// Set Headers
+		if !rev.isEmpty {
+			curlObject.setOption(CURLOPT_HTTPHEADER, s: "If-Match: \(rev)")
+		}
+		if !destination.isEmpty {
+			curlObject.setOption(CURLOPT_HTTPHEADER, s: "Destination: \(destination)")
 		}
 
 		switch method {

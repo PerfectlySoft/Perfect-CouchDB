@@ -6,6 +6,9 @@
 //
 //
 
+import SwiftString
+
+
 /// CouchDBAuthType provides a simple switch for how interaction is maintained over a connection's lifetime.
 /// Options are: basic, and session
 public enum CouchDBAuthType {
@@ -28,12 +31,23 @@ public enum CouchDBAuthType {
 
 }
 
+
+/// Container struct for holding the CouchDB Authentication information
 public struct CouchDBAuthentication {
 
-	var authType:	CouchDBAuthType	= .none
-	var username:	String?
-	var password:	String?
-	var token:		String? // used only if authType = .session
+	/// The authentiction mode. .none, .basic, or .session
+	public var authType:	CouchDBAuthType	= .none
+
+	/// Username for the authentication
+	var username:			String?
+
+	/// Password for the authentication
+	var password:			String?
+
+	/// The token obtained if authtype is .session
+	/// Irrelevant if auth type is not .session
+	public var token:		String?
+
 
 	public init() {}
 	public init(_ u: String, _ p: String, auth: CouchDBAuthType = .basic) {
