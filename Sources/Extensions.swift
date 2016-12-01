@@ -11,7 +11,7 @@ import PerfectLib
 
 /// A lightweight HTTP Response Header Parser
 /// transform the header into a dictionary with http status code
-class HTTPHeaderParser {
+public class HTTPHeaderParser {
 
 	private var _dic: [String:String] = [:]
 	private var _version: String? = nil

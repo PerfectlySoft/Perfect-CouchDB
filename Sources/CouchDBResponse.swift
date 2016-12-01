@@ -6,7 +6,7 @@
 //
 //
 
-enum CouchDBResponse {
+public enum CouchDBResponse {
 	/// CouchDB HTTP Response Codes
 
 	/// Undefined.

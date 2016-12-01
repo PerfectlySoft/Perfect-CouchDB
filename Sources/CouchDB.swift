@@ -41,7 +41,7 @@ public enum HTTPMethod : String {
 
 
 /// Main CouchDB Class
-class CouchDB {
+public class CouchDB {
 
 	/// Boolean switch for enabling/disabling debug mode
 	public var debug: Bool		= false
