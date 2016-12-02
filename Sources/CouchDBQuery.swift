@@ -12,6 +12,8 @@ import PerfectLib
 /// A container class for query params used in the _all_docs selection
 public class CouchDBQuery {
 
+	public init(){}
+	
 	///	conflicts (Bool) – Includes conflicts information in response. Ignored if include_docs isn’t true. Default is false.
 	/// Used for an _all_docs / filter query only
 	public var conflicts : Bool = false

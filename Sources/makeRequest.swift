@@ -56,6 +56,14 @@ extension CouchDB {
 			curlObject.setOption(CURLOPT_HTTPHEADER, s: "Destination: \(destination)")
 		}
 
+		if method == .put && !body.isEmpty {
+			let byteArray = [UInt8](body.utf8)
+			curlObject.setOption(CURLOPT_POST, int: 1)
+			curlObject.setOption(CURLOPT_POSTFIELDSIZE, int: byteArray.count)
+			curlObject.setOption(CURLOPT_COPYPOSTFIELDS, v: UnsafeMutablePointer(mutating: byteArray))
+			curlObject.setOption(CURLOPT_HTTPHEADER, s: "Content-Type: application/json")
+		}
+		
 		switch method {
 		case .post :
 			let byteArray = [UInt8](body.utf8)
@@ -68,6 +76,7 @@ extension CouchDB {
 		default:
 			curlObject.setOption(CURLOPT_CUSTOMREQUEST, s: method.rawValue)
 		}
+
 
 		var header = [UInt8]()
 		var bodyIn = [UInt8]()

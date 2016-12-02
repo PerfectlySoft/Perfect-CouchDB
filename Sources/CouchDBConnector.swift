@@ -9,6 +9,8 @@
 /// Connector information.
 public struct CouchDBConnector {
 
+	public init() {}
+
 	/// SSL mode enabled/disabled.
 	/// Default value: disabled (false)
 	public var ssl: Bool = false

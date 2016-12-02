@@ -45,9 +45,9 @@ public class CouchDB {
 
 	/// Boolean switch for enabling/disabling debug mode
 	public var debug: Bool		= false
-    var database		= ""
-	var connector		= CouchDBConnector()			// defaults have been defined in connector
-	var authentication	= CouchDBAuthentication()		// default is for none
+    public var database		= ""
+	public var connector		= CouchDBConnector()			// defaults have been defined in connector
+	public var authentication	= CouchDBAuthentication()		// default is for none
 
 	public init() {}
 
@@ -606,6 +606,7 @@ public class CouchDB {
 
 		do {
 			let body = try doc.jsonEncodedString()
+			print(body)
 			let (code, response, _, _) = makeRequest(.put, "/\(database)/\(docid)", body: body, rev: rev)
 			return (code, response)
 		} catch {
