@@ -606,7 +606,7 @@ public class CouchDB {
 
 		do {
 			let body = try doc.jsonEncodedString()
-			print(body)
+//			print(body)
 			let (code, response, _, _) = makeRequest(.put, "/\(database)/\(docid)", body: body, rev: rev)
 			return (code, response)
 		} catch {
