@@ -467,10 +467,6 @@ public class CouchDB {
 		///	docid – Document ID
 		/// doc - [String: Any] object to be stored as JSON
 	///
-	///	Query Parameters:
-		///	batch (string) – Stores document in batch mode. Possible values: ok. Optional
-		///	new_edits (boolean) – Prevents insertion of a conflicting document. Possible values: true (default) and false. If false, a well-formed _rev must be included in the document. new_edits=false is used by the replicator to insert documents into the target database even if that leads to the creation of conflicts. Optional
-	///
 	///	Response JSON Object:
 		///	id (string) – Document ID
 		///	ok (boolean) – Operation status

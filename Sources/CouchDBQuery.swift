@@ -69,19 +69,19 @@ public class CouchDBQuery {
 	public var update_seq : Bool = false
 
 	///	selector (json) – JSON object describing criteria used to select documents. More information provided in the section on selector syntax.
-	/// Used for an find query only
+	/// Used for a find query only
 	public var selector = [String:Any]()
 
 	///	sort (json) – JSON array following sort syntax. Optional.
-	/// Used for an find query only
+	/// Used for a find query only
 	public var sort = [String:Any]()
 
 	///	fields (json) – JSON array specifying which fields of each object should be returned. If it is omitted, the entire object is returned. More information provided in the section on filtering fields. Optional.
-	/// Used for an find query only
+	/// Used for a find query only
 	public var fields = [String:Any]()
 
 	///	use_index (json) – Instruct a query to use a specific index. Specified either as "<design_document>" or ["<design_document>", "<index_name>"]. Optional.
-	/// Used for an find query only
+	/// Used for a find query only
 	public var use_index = [String:Any]()
 
 
