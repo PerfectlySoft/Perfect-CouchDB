@@ -1,4 +1,4 @@
-# Perfect-CouchDB [简体中文](README.zh_CN.md)
+# Perfect-CouchDB [English](README.md)
 
 [![Perfect logo](http://www.perfect.org/github/Perfect_GH_header_854.jpg)](http://perfect.org/get-involved.html)
 
@@ -15,19 +15,19 @@
 [![Join the chat at https://gitter.im/PerfectlySoft/Perfect](https://img.shields.io/badge/Gitter-Join%20Chat-brightgreen.svg)](https://gitter.im/PerfectlySoft/Perfect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Slack Status](http://perfect.ly/badge.svg)](http://perfect.ly) [![GitHub version](https://badge.fury.io/gh/PerfectlySoft%2FPerfect-CURL.svg)](https://badge.fury.io/gh/PerfectlySoft%2FPerfect-CURL)
 
-## Apache CouchDB connector for Perfect
+## Apache CouchDB 数据库连接器
 
-**NOTE: This project is in beta**
+**⚠️注意⚠️：该项目仍处于ß测试状态**
 
-This project provides connectivity to [Apache CouchDB](http://couchdb.apache.org).
+该项目允许通过Perfect连接到[Apache CouchDB](http://couchdb.apache.org)数据库。
 
-Full documentation can be found at [http://www.perfect.org/docs/CouchDB.html](http://www.perfect.org/docs/CouchDB.html)
+完整文档请查阅[http://www.perfect.org/docs/CouchDB.html](http://www.perfect.org/docs/CouchDB.html)并选择中文🇨🇳
 
-This package builds with Swift Package Manager and is part of the [Perfect](https://github.com/PerfectlySoft/Perfect) project. It was written to be stand-alone and so does not require PerfectLib or any other components.
+本项目采用SPM软件包管理器进行编译，是Perfect项目的一个组成部分[Perfect](https://github.com/PerfectlySoft/Perfect)，可以独立运行，并不需要其他Perfect的组件。
 
-Ensure you have installed and activated the latest Swift 3.0 tool chain.
+请确定您的计算机上安装了Swift 3.0以上工具集。
 
-## Example usage:
+## 应用范例
 
 ```swift
 var test = CouchDB()
@@ -49,22 +49,21 @@ do {
 ```
 
 
-## Building
+## 编译
 
-Add this project as a dependency in your Package.swift file.
+请在Package.swift 文件中追加依存关系：
 
 ```
 .Package(url: "https://github.com/PerfectlySoft/Perfect-CouchDB.git", majorVersion: 1)
 ```
 
-## Issues
+### 问题报告、内容贡献和客户支持
 
-We are transitioning to using JIRA for all bugs and support related issues, therefore the GitHub issues has been disabled.
+我们目前正在过渡到使用JIRA来处理所有源代码资源合并申请、修复漏洞以及其它有关问题。因此，GitHub 的“issues”问题报告功能已经被禁用了。
 
-If you find a mistake, bug, or any other helpful suggestion you'd like to make on the docs please head over to [http://jira.perfect.org:8080/servicedesk/customer/portal/1](http://jira.perfect.org:8080/servicedesk/customer/portal/1) and raise it.
+如果您发现了问题，或者希望为改进本文提供意见和建议，[请在这里指出](http://jira.perfect.org:8080/servicedesk/customer/portal/1).
 
-A comprehensive list of open issues can be found at [http://jira.perfect.org:8080/projects/ISS/issues](http://jira.perfect.org:8080/projects/ISS/issues)
+在您开始之前，请参阅[目前待解决的问题清单](http://jira.perfect.org:8080/projects/ISS/issues).
 
-
-## Further Information
-For more information on the Perfect project, please visit [perfect.org](http://perfect.org).
+## 更多信息
+关于本项目更多内容，请参考[perfect.org](http://perfect.org).
