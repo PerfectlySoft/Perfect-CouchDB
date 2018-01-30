@@ -121,7 +121,7 @@ extension CouchDB {
 
 		// parse the body data into a json convertible
 		do {
-			if (content?.characters.count)! > 0 {
+			if (content?.count)! > 0 {
 				if (content?.startsWith("["))! {
 					let arr = try content?.jsonDecode() as! [Any]
 					data["response"] = arr

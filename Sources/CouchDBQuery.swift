@@ -90,17 +90,17 @@ public class CouchDBQuery {
 		var json = [String: Any]()
 		json["conflicts"] = conflicts
 		json["descending"] = descending
-		if endkey.characters.count > 0 { json["endkey"] = endkey }
-		if endkey_docid.characters.count > 0 { json["endkey_docid"] = endkey_docid }
+		if endkey.count > 0 { json["endkey"] = endkey }
+		if endkey_docid.count > 0 { json["endkey_docid"] = endkey_docid }
 		json["include_docs"] = include_docs
 		json["inclusive_end"] = inclusive_end
-		if key.characters.count > 0 { json["key"] = key }
+		if key.count > 0 { json["key"] = key }
 		if keys.count > 0 { json["keys"] = keys }
 		if limit > 0 { json["limit"] = limit }
 		if skip > 0 { json["skip"] = skip }
 		if stale != .ignore { json["stale"] = stale }
-		if startkey.characters.count > 0 { json["startkey"] = startkey }
-		if startkey_docid.characters.count > 0 { json["startkey_docid"] = startkey_docid }
+		if startkey.count > 0 { json["startkey"] = startkey }
+		if startkey_docid.count > 0 { json["startkey_docid"] = startkey_docid }
 		json["update_seq"] = update_seq
 
 		return try! json.jsonEncodedString()

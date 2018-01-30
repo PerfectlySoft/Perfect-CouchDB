@@ -444,7 +444,7 @@ public class CouchDB {
 		queryParams["local_seq"] = local_seq
 		queryParams["meta"] = meta
 		if open_revs.count > 0 { queryParams["open_revs"] = open_revs }
-		if rev.characters.count > 0 { queryParams["rev"] = rev }
+		if rev.count > 0 { queryParams["rev"] = rev }
 		queryParams["revs"] = revs
 		queryParams["revs_info"] = revs_info
 
