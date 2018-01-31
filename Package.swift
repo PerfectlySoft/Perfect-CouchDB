@@ -5,6 +5,7 @@ let package = Package(
 	name: "PerfectCouchDB",
 	targets: [],
 	dependencies: [
+		.Package(url: "https://github.com/PerfectlySoft/PerfectLib.git", majorVersion: 3),
 		.Package(url: "https://github.com/iamjono/SwiftString.git", majorVersion: 2),
 		.Package(url: "https://github.com/PerfectlySoft/Perfect-CURL.git", majorVersion: 3),
 	]
