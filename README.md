@@ -25,7 +25,7 @@ Full documentation can be found at [http://www.perfect.org/docs/CouchDB.html](ht
 
 This package builds with Swift Package Manager and is part of the [Perfect](https://github.com/PerfectlySoft/Perfect) project. It was written to be stand-alone and so does not require PerfectLib or any other components.
 
-Ensure you have installed and activated the latest Swift 3.0 tool chain.
+Ensure you have installed and activated the latest Swift 4.0 tool chain.
 
 ## Example usage:
 
@@ -54,7 +54,7 @@ do {
 Add this project as a dependency in your Package.swift file.
 
 ```
-.Package(url: "https://github.com/PerfectlySoft/Perfect-CouchDB.git", majorVersion: 1)
+.Package(url: "https://github.com/PerfectlySoft/Perfect-CouchDB.git", majorVersion: 3)
 ```
 
 ## Issues
