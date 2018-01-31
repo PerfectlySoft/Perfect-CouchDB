@@ -25,7 +25,7 @@
 
 本项目采用SPM软件包管理器进行编译，是Perfect项目的一个组成部分[Perfect](https://github.com/PerfectlySoft/Perfect)，可以独立运行，并不需要其他Perfect的组件。
 
-请确定您的计算机上安装了Swift 3.0以上工具集。
+请确定您的计算机上安装了Swift 4.0以上工具集。
 
 ## 应用范例
 
@@ -54,7 +54,7 @@ do {
 请在Package.swift 文件中追加依存关系：
 
 ```
-.Package(url: "https://github.com/PerfectlySoft/Perfect-CouchDB.git", majorVersion: 1)
+.Package(url: "https://github.com/PerfectlySoft/Perfect-CouchDB.git", majorVersion: 3)
 ```
 
 ### 问题报告、内容贡献和客户支持
